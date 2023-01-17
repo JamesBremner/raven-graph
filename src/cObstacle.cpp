@@ -267,24 +267,24 @@ void cObstacle::tourSpanningTree()
 
     // loop over nodes
     // for (int spanstart = 0; spanstart < vN.size(); spanstart++)
-    auto spanstart = myGraph.begin();
+    auto spanstart = 0;
     {
         // need only check spanning trees rooted near a margin
         //  if (adjacent(vN[spanstart], vL).size() != 8)
         //      continue;
 
         // construct spanning tree starting at the node
-        mySpanningTree = myGraph.spanningTree((*spanstart)->userName());
+        mySpanningTree = myGraph.spanningTree(myGraph.userName(spanstart));
 
         // // connect spanning tree leaves
         auto connectedLeaves = mySpanningTree;
-        vVertex_t leaves = connectedLeaves.leaves();
+        raven::vVertex_t leaves = connectedLeaves.leaves();
 
         std::cout << connectedLeaves.text();
         std::cout << "leaves ";
-        for( vertex_t l : leaves )
+        for( raven::vertex_t l : leaves )
         {
-            std::cout << l->userName() << " ";
+            std::cout << mySpanningTree.userName( l ) << " ";
         }
         std::cout << "\n";
 
