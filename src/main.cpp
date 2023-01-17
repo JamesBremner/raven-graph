@@ -4,7 +4,7 @@
 main()
 {
     // construct test graph
-    cGraph graph;
+    raven::cGraph graph;
     graph.setEdges("a b\nb c\nc d\nd a");
 
     // display graph edges

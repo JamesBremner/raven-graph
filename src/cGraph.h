@@ -4,6 +4,7 @@
 #include <iostream>
 #include <functional>
 
+namespace raven {
 
 typedef int vertex_t;
 typedef std::vector<int> vVertex_t;
@@ -185,3 +186,5 @@ private:
     vertex_t dst);
 
 };
+
+}

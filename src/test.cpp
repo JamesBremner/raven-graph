@@ -4,7 +4,7 @@
 
 TEST(adjacent)
 {
-    cGraph graph;
+    raven::cGraph graph;
     graph.directed(false);
     graph.setEdges(
         "a b "
@@ -45,7 +45,7 @@ TEST(adjacent)
 
 TEST(setEdges)
 {
-    cGraph graph;
+    raven::cGraph graph;
 
     graph.setEdges(
         "a b 1 "
@@ -73,7 +73,7 @@ TEST(setEdges)
 TEST(breadth_first_search)
 {
     // construct test graph
-    cGraph graph;
+    raven::cGraph graph;
     graph.setEdges(
         "a b "
         "b c "
@@ -99,7 +99,7 @@ TEST(breadth_first_search)
 TEST(depth_first_search)
 {
     // construct test graph
-    cGraph graph;
+    raven::cGraph graph;
     graph.setEdges(
         "a b "
         "b c "
@@ -145,7 +145,7 @@ TEST( depth_first_directed)
     std::vector<std::string> expected_directed{"a", "x", "y", "d", "c", "b" };
     std::vector<std::string> visited;
 
-    cGraph graph;
+    raven::cGraph graph;
     graph.directed(true);
     graph.setEdges(
         "a b "
@@ -168,7 +168,7 @@ TEST( depth_first_directed)
 TEST(dijsktra_undirected)
 {
     // construct test graph
-    cGraph graph;
+    raven::cGraph graph;
     graph.setEdges(
         "a b "
         "b c "
@@ -222,7 +222,7 @@ TEST(dijsktra_undirected)
 
 TEST(SpanningTree_undirected)
 {
-    cGraph graph;
+    raven::cGraph graph;
     graph.setEdges(
         "a b "
         "b c "
@@ -248,7 +248,7 @@ TEST(SpanningTree_undirected)
 
 TEST(SpanningTreeCost)
 {
-    cGraph graph;
+    raven::cGraph graph;
 
     graph.setEdges(
         "a b 1 "
@@ -295,7 +295,7 @@ TEST(SpanningTreeCost)
 
 TEST(componentCount)
 {
-    cGraph graph;
+    raven::cGraph graph;
     graph.setEdges(
         "a b "
         "b c "

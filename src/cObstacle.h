@@ -49,8 +49,8 @@ class cObstacle
     int myBestCountRevisited;
     bool myfrect;               /// true if grid is rectangular
     std::vector< cxy > myPolygon;   /// polygon vertices for non-rectangular grid
-    cGraph myGraph;
-    cGraph mySpanningTree;
+    raven::cGraph myGraph;
+    raven::cGraph mySpanningTree;
 
 public:
 

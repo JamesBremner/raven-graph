@@ -5,6 +5,8 @@
 
 #include "cGraph.h"
 
+namespace raven {
+
 void cGraph::clear()
 {
     myfDirected = false;
@@ -540,4 +542,5 @@ int cGraph::componentCount()
             });
     }
     return ret;
+}
 }
