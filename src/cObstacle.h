@@ -224,7 +224,7 @@ private:
 
 #ifdef UNIT_TEST
 public:
-    void setGraph( const cGraph& g )
+    void setGraph( const raven::cGraph& g )
     {
         myGraph = g;
 

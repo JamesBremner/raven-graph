@@ -8,7 +8,7 @@
 TEST( tourSpanningTree )
 {
     cObstacle O;
-    cGraph g;
+    raven::cGraph g;
     g.setEdges(
         "a b "
         "a x "    );
