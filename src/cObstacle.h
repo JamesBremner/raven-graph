@@ -43,10 +43,12 @@ class cObstacle
 
     cell::cAutomaton<cOCell> *A; ///< 2D grid
     std::vector<cOCell *> vN;    ///< nodes to be included in path
-    //vlink_t vL;                  ///< links between nodes
-    vlink_t vPath;
-    std::vector<cOCell *> myNodesRevisited;
+
+    std::vector<std::pair<int,int>> vPath;
+    std::vector<bool> myVisited;
+    std::vector<int> myNodesRevisited;
     int myBestCountRevisited;
+
     bool myfrect;               /// true if grid is rectangular
     std::vector< cxy > myPolygon;   /// polygon vertices for non-rectangular grid
     raven::cGraph myGraph;
@@ -145,16 +147,16 @@ public:
     /// @return
     bool isBlocked(int x1, int y1, int x2, int y2);
 
-    vlink_t path() const
-    {
-        if( ! vPath.size() )
-            throw std::runtime_error("No path");
-        return vPath;
-    }
-    std::vector<cOCell *> NodesRevisited() const
-    {
-        return myNodesRevisited;
-    }
+    // vlink_t path() const
+    // {
+    //     if( ! vPath.size() )
+    //         throw std::runtime_error("No path");
+    //     return vPath;
+    // }
+    // std::vector<cOCell *> NodesRevisited() const
+    // {
+    //     return myNodesRevisited;
+    // }
 
      vlink_t spanningTree_get();
 
@@ -185,38 +187,39 @@ private:
         cOCell *n1, cOCell *n2,
         const vlink_t &vlink);
 
-    cOCell *closestUnvisitedConnected(
-        cOCell *v, vlink_t &vLink);
+    int closestUnvisitedAdjacent(
+        int v, 
+        raven::cGraph& g );
 
     void tour(
-        vlink_t &connectedLeaves,
-        cOCell * start );
+        raven::cGraph &connectedLeaves,
+        int start );
 
-    /// @brief Find closest unvisited node
+    /// @brief Find closest reachable unvisited node
     /// @param start start node
-    /// @param vlink allowed links
-    /// @param path path from start to nearest
-    /// @return pointer to nearest unvisited node
+    /// @param g graph
+    /// @param[out] path path from start to nearest
+    /// @return nearest unvisited node
     ///
     /// Uses Dijsktra alorithm
-    cOCell *ClosestUnvisited(
-        cOCell *start,
-        vlink_t &vlink,
-        std::vector<cOCell *> &path);
+    int ClosestUnvisited(
+        int start,
+        raven::cGraph &g,
+        std::vector<int> &path);
 
     /// @brief Add connection to path
     /// @param node1 
     /// @param node2 
     void pathAdd( 
-        cOCell * node1,
-        cOCell * node2   );
+        int node1,
+        int node2   );
 
     /// @brief find path starting at a leaf node visiting every node with fewest revisits to the same nodes
     /// @param leaves 
     /// @param connectedLeaves 
     void findBestPath(
-        std::vector<cOCell *>& leaves,
-        vlink_t& connectedLeaves    );
+        std::vector<int>& leaves,
+        raven::cGraph& connectedLeaves    );
 
     /// @brief Find tree that connects all required nodes
     /// @param start index to root node, defaults to 0

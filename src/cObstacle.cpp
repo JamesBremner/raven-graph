@@ -282,9 +282,9 @@ void cObstacle::tourSpanningTree()
 
         std::cout << connectedLeaves.text();
         std::cout << "leaves ";
-        for( raven::vertex_t l : leaves )
+        for (raven::vertex_t l : leaves)
         {
-            std::cout << mySpanningTree.userName( l ) << " ";
+            std::cout << mySpanningTree.userName(l) << " ";
         }
         std::cout << "\n";
 
@@ -300,17 +300,16 @@ void cObstacle::tourSpanningTree()
                 if (std::find(va.begin(), va.end(), leaves[kw]) == va.end())
                     continue;
 
-                double cost = myGraph.edgeAttrDouble(leaves[kv], leaves[kw],0);
+                double cost = myGraph.edgeAttrDouble(leaves[kv], leaves[kw], 0);
                 connectedLeaves.addEdge(leaves[kv], leaves[kw],
-                    std::to_string( cost ) );
-
+                                        std::to_string(cost));
             }
 
         // // loop over leaf nodes in spanning tree
         // // to find the path starting at a leaf node
         // // that visits every node
         // // with fewest revisits to the same nodes
-        // findBestPath(leaves, connectedLeaves);
+        findBestPath(leaves, connectedLeaves);
 
         // if (vPath.size() && (myNodesRevisited.size() < myBestCountRevisited))
         // {
@@ -327,4 +326,186 @@ void cObstacle::tourSpanningTree()
 
     // vPath = bestPath;
     // myNodesRevisited = bestNodesRevisited;
+}
+
+void cObstacle::findBestPath(
+    std::vector<int> &leaves,
+    raven::cGraph &connectedLeaves)
+{
+    int bestCountRevisited = 1e7;
+    std::vector<std::pair<int, int>> bestPath;
+    std::vector<int> bestNodesRevisited;
+    for (auto start : leaves)
+    {
+        tour(connectedLeaves, start);
+
+        if (myNodesRevisited.size() < bestCountRevisited)
+        {
+            // found a path with fewer nodes visited multiple times
+            bestCountRevisited = myNodesRevisited.size();
+            bestPath = vPath;
+            bestNodesRevisited = myNodesRevisited;
+
+            if (!bestCountRevisited)
+            {
+
+                // found a path that does not revisit any nodes
+                // no need to search any further
+                break;
+            }
+        }
+    }
+    vPath = bestPath;
+    myNodesRevisited = bestNodesRevisited;
+}
+void cObstacle::tour(
+    raven::cGraph &connectedLeaves,
+    int start)
+{
+    vPath.clear();
+    myNodesRevisited.clear();
+    myVisited.clear();
+    myVisited.resize(connectedLeaves.vertexCount(), false);
+
+    link_t best_link;
+
+    // auto v = std::get<0>(vL[start]);
+    auto v = start;
+    // std::cout << v->ID() << " ";
+    myVisited[v] = true;
+
+    while (1)
+    {
+        while (1)
+        {
+            while (1)
+            {
+                // travel along spanning tree
+                while (1)
+                {
+                    auto w = closestUnvisitedAdjacent(
+                        v,
+                        mySpanningTree);
+                    if (!w)
+                        break;
+
+                    pathAdd(v, w);
+                    v = w;
+                }
+
+                // travel from leaf to an unvisited connected leaf
+                auto w = closestUnvisitedAdjacent(
+                    v,
+                    connectedLeaves);
+                if (!w)
+                    break;
+
+                pathAdd(v, w);
+                v = w;
+            }
+
+            // jump to closest unvisited node in spanning tree
+            std::vector<int> jump_path;
+            auto w = ClosestUnvisited(
+                v,
+                mySpanningTree,
+                jump_path);
+            if (!w)
+            {
+                // all nodes have been visited
+                return;
+            }
+
+            // std::cout << " jump path ( " << jump_path[0]->ID() <<" ";
+            for (auto k = 1; k < jump_path.size(); k++)
+            {
+                // std::cout << jump_path[k]->ID()   <<" ";
+                pathAdd(
+                    jump_path[k - 1],
+                    jump_path[k]);
+            }
+            // std::cout << " )\n";
+            v = w;
+        }
+    }
+}
+void cObstacle::pathAdd(
+    int node1,
+    int node2)
+{
+    // add edge to path
+    vPath.push_back(std::make_pair(node1, node2));
+
+    if (myVisited[node2])
+    {
+        // the destination node has been previously visited
+        // add to vector of revisited nodes
+        myNodesRevisited.push_back(node2);
+    }
+
+    // mark the destination node as visited
+    // ( the source node will have been marked when the path reached it )
+    myVisited[node2] = true;
+}
+
+int cObstacle::closestUnvisitedAdjacent(
+    int v, raven::cGraph &g)
+{
+    double bestDist = INT_MAX;
+    int ret = 0;
+    int w;
+    for (int a : g.adjacentOut(v))
+    {
+        if (myVisited[a])
+            continue;
+        double cost = g.edgeAttrDouble(v, a, 0);
+        if (cost < bestDist)
+        {
+            bestDist = cost;
+            ret = a;
+        }
+    }
+    return ret;
+}
+int cObstacle::ClosestUnvisited(
+    int start,
+    raven::cGraph &g,
+    std::vector<int> &path)
+{
+    // std::cout << "ClosestUnvisited from " << startp->ID() << "\n";
+
+    // shortest distance from start to each node
+    std::vector<double> dist(g.vertexCount(), INT_MAX);
+
+    // Find shortest path to all vertices
+
+    auto pred = g.dijsktra(start);
+
+    double bestDist = INT_MAX;
+    int best = 0;
+    for (int i = 0; i < dist.size(); i++)
+    {
+        if (myVisited[i])
+            continue;
+        if (dist[i] < bestDist)
+        {
+            bestDist = dist[i];
+            best = i;
+        }
+    }
+    if (bestDist == INT_MAX)
+        return best;
+
+    path.push_back(best);
+    int i = best;
+    while (1)
+    {
+        i = pred[i];
+        path.push_back(i);
+        if (i == start)
+            break;
+    }
+    std::reverse(path.begin(), path.end());
+
+    return best;
 }

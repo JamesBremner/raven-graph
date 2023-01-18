@@ -14,6 +14,7 @@ TEST( tourSpanningTree )
         "a x "    );
     O.setGraph( g );
     O.tourSpanningTree();
+    auto st = O.spanningTree_get();
 
 }
 
