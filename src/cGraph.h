@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include <string>
 #include <memory>
@@ -17,7 +18,7 @@ namespace raven
         cGraph()
         : myfDirected( false )
         {}
-        
+
         //////////  SETTERS ////////////////////////////////
 
         /// @brief reset graph to empty default state ( undirected )
@@ -200,5 +201,19 @@ namespace raven
             vertex_t src,
             vertex_t dst);
     };
+
+enum class graph_calc {
+    none,
+    cycle
+};
+
+/// @brief read input file
+/// @param g graph to store input
+/// @param fname path to input file
+/// @return calculation option
+
+graph_calc readfile(
+    raven::cGraph& g,
+    const std::string &fname);
 
 }

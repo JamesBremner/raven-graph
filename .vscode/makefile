@@ -24,9 +24,12 @@ OPT = -g
 CCflags = -std=c++17 $(OPT) -D_mingw_
 
 # sources
-OBJ_starter = \
-	$(ODIR)/main.o \
-	$(ODIR)/cGraph.o
+OBJ_graphify = \
+	$(ODIR)/graphify.o \
+	$(ODIR)/graphifyGUI.o \
+	$(ODIR)/readfile.o \
+	$(ODIR)/cGraph.o \
+	$(ODIR)/cRunWatch.o
 
 OBJ_obstacle = \
 	$(ODIR)/mainObstacle.o \
@@ -57,9 +60,11 @@ $(ODIR)/%.o: %.cpp cGraph.h
 	g++ -c $<  \
 	-o $@ $(INCS) $(CCflags)
 
-starter: $(OBJ_starter)
-	g++ $(OPT) \
-	-o bin/starter.exe $^  \
+### LINK
+
+graphify: $(OBJ_graphify)
+	g++ -o bin/graphify.exe \
+	$(OPT)  $^  \
 	$(static_link_flags) $(LIBS)
 
 test: $(OBJ_test)
