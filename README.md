@@ -12,6 +12,8 @@ Applications:
  - around obstacles in a room
  - between crops in a field
 
+[Detailed Documentation](https://github.com/JamesBremner/raven-graph/wiki/Obstacles)
+
 ## Test - unit test graph class methods
 
 
