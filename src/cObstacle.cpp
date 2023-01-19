@@ -266,8 +266,8 @@ void cObstacle::tourSpanningTree()
     std::vector<cOCell *> bestNodesRevisited;
 
     // loop over nodes
-    // for (int spanstart = 0; spanstart < vN.size(); spanstart++)
-    auto spanstart = 0;
+     for (int spanstart = 0; spanstart < myGraph.vertexCount(); spanstart++)
+    //auto spanstart = 0;
     {
         // need only check spanning trees rooted near a margin
         //  if (adjacent(vN[spanstart], vL).size() != 8)
@@ -508,4 +508,20 @@ int cObstacle::ClosestUnvisited(
     std::reverse(path.begin(), path.end());
 
     return best;
+}
+
+vlink_t cObstacle::path() const
+{
+    if (!vPath.size())
+        throw std::runtime_error("No path");
+    vlink_t ret;
+    for( auto& nl : vPath )
+    {
+        auto sn1 = myGraph.userName( nl.first );
+        auto sn2 = myGraph.userName( nl.second );
+        auto c1 = A->cell( atoi( sn1.c_str() ));
+        auto c2 = A->cell( atoi( sn2.c_str() ));
+        ret.push_back(std::make_tuple(c1, c2, 0));
+    }
+    return ret;
 }

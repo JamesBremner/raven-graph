@@ -13,6 +13,11 @@ namespace raven
     class cGraph
     {
     public:
+
+        cGraph()
+        : myfDirected( false )
+        {}
+        
         //////////  SETTERS ////////////////////////////////
 
         /// @brief reset graph to empty default state ( undirected )

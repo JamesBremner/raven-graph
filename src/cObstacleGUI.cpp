@@ -125,7 +125,7 @@ void cGUI::draw(PAINTSTRUCT &ps)
 
         S.color(0xFF0000);
         S.penThick(1);
-        sspath << std::get<0>(myObstacle.path()[0])->ID();
+         sspath << std::get<0>(myObstacle.path()[0])->ID();
         for (auto &pl : myObstacle.path())
         {
             auto n1 = std::get<0>(pl);
@@ -144,20 +144,21 @@ void cGUI::draw(PAINTSTRUCT &ps)
                 sspath << "\r\n";
                 pathCount = 0;
             }
-        }
-        S.text(sspath.str(), {scale, H * scale, 1000, 1000});
-        std::cout << sspath.str() << "\n";
+         }
+        // S.text(sspath.str(), {scale, H * scale, 1000, 1000});
+         std::cout << sspath.str() << "\n";
 
         // S.text(
         //     "Nodes revisited " +
         //     std::to_string(myObstacle.NodesRevisited().size()),
         //     {10,H*scale+30});
-        std::cout << "Nodes revisited " << myObstacle.NodesRevisited().size() << " : ";
-        for (auto n : myObstacle.NodesRevisited())
-            std::cout << n->ID() << " ";
+        // std::cout << "Nodes revisited " << myObstacle.NodesRevisited().size() << " : ";
+        // for (auto n : myObstacle.NodesRevisited())
+        //     std::cout << n->ID() << " ";
         break;
 
     case eView::span:
+        drawObstacles(S, scale);
         S.color(0x0000FF);
         S.penThick(2);
         for (auto &pl : myObstacle.spanningTree_get())

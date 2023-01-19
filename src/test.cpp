@@ -22,13 +22,14 @@ TEST(adjacent)
         "a x ");
 
     v = graph.findorAdd("a");
-    CHECK_EQUAL(2, graph.adjacentIn(v).size());
+    CHECK_EQUAL(0, graph.adjacentIn(v).size());
     CHECK_EQUAL(2, graph.adjacentOut(v).size());
     CHECK_EQUAL(2, graph.adjacentAll(v).size());
 
     auto vls = graph.leaves();
     CHECK_EQUAL(2, vls.size());
 
+    graph.directed(false);
     graph.setEdges(
         "a b "
         "b c "
@@ -142,7 +143,7 @@ TEST(depth_first_search)
 
 TEST( depth_first_directed)
 {
-    std::vector<std::string> expected_directed{"a", "x", "y", "d", "c", "b" };
+    std::vector<std::string> expected_directed{"a", "x", "y", "b", "c", "d" };
     std::vector<std::string> visited;
 
     raven::cGraph graph;
@@ -191,34 +192,41 @@ TEST(dijsktra_undirected)
         CHECK_EQUAL(graph.userName(p2[k]), expected2[k]);
 }
 
-// TEST(cycle_finder)
-// {
-//     // construct test graph
-//     cGraph graph;
+TEST(cycle_finder_directed)
+{
+    // construct test graph
+    raven::cGraph graph;
+    graph.directed( true );
 
-//     // one cycle
-//     graph.setEdges("a b \nb c \nc d \nd a ");
-//     std::vector<std::string> expected1{"a", "b", "c", "d", "a"};
-//     auto vCycle = graph.dfs_cycle_finder("a");
-//     CHECK_EQUAL(vCycle.size(), 1);
-//     for (int k = 0; k < expected1.size(); k++)
-//         CHECK_EQUAL(graph.userName(vCycle[0][k]), expected1[k]);
+    // one cycle
+    graph.setEdges(
+        "a b "
+        "b c "
+        "c d "
+        "d a ");
+    std::vector<std::string> expected1{"a", "b", "c", "d", "a"};
 
-//     // no cycle ( directed )
-//     graph.setEdges("a b \nb c \nc d \na x \nx y \ny d ");
-//     vCycle = graph.dfs_cycle_finder("a");
-//     CHECK_EQUAL(vCycle.size(), 0);
+    auto vCycle = graph.dfs_cycle_finder("a");
 
-//     // two cycles
-//     graph.setEdges("a b \nb c \nc d \nd a \nc a ");
-//     vCycle = graph.dfs_cycle_finder("a");
-//     CHECK_EQUAL(vCycle.size(), 2);
-//     std::vector<std::string> expected0{"a", "b", "c", "a"};
-//     for (int k = 0; k < expected0.size(); k++)
-//         CHECK_EQUAL(graph.userName(vCycle[0][k]), expected0[k]);
-//     for (int k = 0; k < expected1.size(); k++)
-//         CHECK_EQUAL(graph.userName(vCycle[1][k]), expected1[k]);
-// }
+    CHECK_EQUAL(1, vCycle.size());
+    for (int k = 0; k < expected1.size(); k++)
+        CHECK_EQUAL(graph.userName(vCycle[0][k]), expected1[k]);
+
+    // no cycle ( directed )
+    graph.setEdges("a b \nb c \nc d \na x \nx y \ny d ");
+    vCycle = graph.dfs_cycle_finder("a");
+    CHECK_EQUAL(vCycle.size(), 0);
+
+    // two cycles
+    graph.setEdges("a b \nb c \nc d \nd a \nc a ");
+    vCycle = graph.dfs_cycle_finder("a");
+    CHECK_EQUAL(vCycle.size(), 2);
+    std::vector<std::string> expected0{"a", "b", "c", "a"};
+    for (int k = 0; k < expected0.size(); k++)
+        CHECK_EQUAL(graph.userName(vCycle[0][k]), expected0[k]);
+    for (int k = 0; k < expected1.size(); k++)
+        CHECK_EQUAL(graph.userName(vCycle[1][k]), expected1[k]);
+}
 
 TEST(SpanningTree_undirected)
 {

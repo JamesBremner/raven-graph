@@ -147,12 +147,8 @@ public:
     /// @return
     bool isBlocked(int x1, int y1, int x2, int y2);
 
-    // vlink_t path() const
-    // {
-    //     if( ! vPath.size() )
-    //         throw std::runtime_error("No path");
-    //     return vPath;
-    // }
+     vlink_t path() const;
+
     // std::vector<cOCell *> NodesRevisited() const
     // {
     //     return myNodesRevisited;
