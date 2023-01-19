@@ -5,7 +5,7 @@ Applications:
 
 ## Graphify - Run graph algorithms
 
-- Cycle detection
+- Cycle detection  [Detailed Documentation](https://github.com/JamesBremner/raven-graph/wiki/Cycle-Finder)
 
 ## Obstacle - robot route planning 
 
